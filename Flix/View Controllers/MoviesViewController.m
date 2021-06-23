@@ -15,6 +15,7 @@
 @property (nonatomic, strong) NSArray *movies;
     //private field (instance variable), automatically creates a getter and a setter method which can later be overrided.
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
+@property (nonatomic, strong) UIRefreshControl *refreshControl;
 
 @end
 
@@ -26,6 +27,14 @@
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     
+    [self fetchMovies];
+    
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    [self.refreshControl addTarget:self action:@selector(fetchMovies) forControlEvents:UIControlEventValueChanged];
+    [self.tableView insertSubview:self.refreshControl atIndex:0];         //add to table view
+}
+
+- (void)fetchMovies {
     NSURL *url = [NSURL URLWithString:@"https://api.themoviedb.org/3/movie/now_playing?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed"];
     NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:10.0];
     NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:nil delegateQueue:[NSOperationQueue mainQueue]];
@@ -51,9 +60,9 @@
                // TODO: Store the movies in a property to use elsewhere
                // TODO: Reload your table view data
            }
+        [self.refreshControl endRefreshing];
        }];
     [task resume];
-    // Do any additional setup after loading the view.
 }
 
 - (void)didReceiveMemoryWarning {
