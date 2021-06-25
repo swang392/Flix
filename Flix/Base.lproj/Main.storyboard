@@ -99,7 +99,7 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ju7-ww-zqm">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ju7-ww-zqm">
                                 <rect key="frame" x="139" y="292" width="208" height="67"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="italicSystem" pointSize="30"/>
@@ -143,11 +143,11 @@
             </objects>
             <point key="canvasLocation" x="1958" y="-609"/>
         </scene>
-        <!--Superhero-->
+        <!--Collection-->
         <scene sceneID="fDY-t5-OZN">
             <objects>
                 <navigationController id="sl9-P5-f1z" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Superhero" id="HLV-hz-sUK"/>
+                    <tabBarItem key="tabBarItem" title="Collection" image="projector_tabbar_item" id="HLV-hz-sUK"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="zj5-hw-kgV">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -160,7 +160,7 @@
             </objects>
             <point key="canvasLocation" x="2935" y="125"/>
         </scene>
-        <!--Movies Grid View Controller-->
+        <!--Collection-->
         <scene sceneID="3r7-5X-80D">
             <objects>
                 <viewController id="BGT-Nw-AqM" customClass="MoviesGridViewController" sceneMemberID="viewController">
@@ -169,24 +169,34 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Wa9-JT-ITU">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="889"/>
+                                <rect key="frame" x="0.0" y="0.0" width="394" height="889"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="CAR-UQ-e7q">
-                                    <size key="itemSize" width="146" height="197"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="CAR-UQ-e7q">
+                                    <size key="itemSize" width="152" height="212"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="e8k-h0-uaH" customClass="MoviesGridViewControler">
-                                        <rect key="frame" x="0.0" y="0.0" width="146" height="197"/>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="MovieCollectionCell" id="e8k-h0-uaH" customClass="MovieCollectionCell">
+                                        <rect key="frame" x="0.0" y="0.0" width="152" height="212"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="87O-m8-e5U">
-                                            <rect key="frame" x="0.0" y="0.0" width="146" height="197"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="152" height="212"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kwG-B2-bzF">
+                                                    <rect key="frame" x="0.0" y="0.0" width="152" height="212"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                </imageView>
+                                            </subviews>
                                         </collectionViewCellContentView>
-                                        <size key="customSize" width="146" height="197"/>
+                                        <color key="backgroundColor" red="0.88877826929092407" green="0.81083112955093384" blue="0.95163577795028687" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <size key="customSize" width="152" height="212"/>
+                                        <connections>
+                                            <outlet property="posterView" destination="kwG-B2-bzF" id="Iur-oV-tTr"/>
+                                        </connections>
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
@@ -194,7 +204,7 @@
                         <viewLayoutGuide key="safeArea" id="GX4-7P-hKk"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
-                    <navigationItem key="navigationItem" id="w1t-v5-eNx"/>
+                    <navigationItem key="navigationItem" title="Collection" id="w1t-v5-eNx"/>
                     <connections>
                         <outlet property="collectionView" destination="Wa9-JT-ITU" id="qag-V8-96z"/>
                     </connections>
@@ -207,7 +217,7 @@
         <scene sceneID="CTX-dE-wmM">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Ufs-Ix-HTR" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Now Playing" id="K5S-zK-FaJ"/>
+                    <tabBarItem key="tabBarItem" title="Now Playing" image="now_playing_tabbar_item" id="K5S-zK-FaJ"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="zMK-pN-sJE">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
@@ -224,6 +234,8 @@
         </scene>
     </scenes>
     <resources>
+        <image name="now_playing_tabbar_item" width="21" height="21"/>
+        <image name="projector_tabbar_item" width="21" height="25"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

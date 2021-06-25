@@ -6,6 +6,9 @@
 //
 
 #import "MoviesGridViewController.h"
+#import "MovieCollectionCell.h"
+#import "UIImageView+AFNetworking.h"
+
 
 @interface MoviesGridViewController () <UICollectionViewDataSource, UICollectionViewDelegate>
 
@@ -21,6 +24,19 @@
     
     self.collectionView.dataSource = self;
     self.collectionView.delegate = self;
+    
+    [self fetchMovies];
+    
+    //collection view layout
+    UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout *) self.collectionView.collectionViewLayout;
+    
+    layout.minimumInteritemSpacing = 5;
+    layout.minimumLineSpacing = 5;
+    
+    CGFloat postersPerLine = 2;
+    CGFloat itemWidth = (self.collectionView.frame.size.width - layout.minimumInteritemSpacing * (postersPerLine - 1)) / postersPerLine;
+    CGFloat itemHeight = itemWidth * 1.5;
+    layout.itemSize = CGSizeMake(itemWidth, itemHeight);
 }
 
 
@@ -46,19 +62,14 @@
            else {
                NSDictionary *dataDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
                
-               NSLog(@"%@", dataDictionary);                //check if everything was read in correctly
+               //NSLog(@"%@", dataDictionary);                //check if everything was read in correctly
                
                //Get the array of movies
                self.movies = dataDictionary[@"results"];
-               for (NSDictionary *movie in self.movies) {
-                   NSLog(@"%@", movie[@"title"]);
-               }
-               
-               
-
-               // TODO: Get the array of movies
-               // TODO: Store the movies in a property to use elsewhere
-               // TODO: Reload your table view data
+               [self.collectionView reloadData];
+//               for (NSDictionary *movie in self.movies) {
+//                   NSLog(@"%@", movie[@"title"]);
+//               }
            }
        
        }];
@@ -77,11 +88,25 @@
 */
 
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    <#code#>
+    MovieCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"MovieCollectionCell" forIndexPath:indexPath];
+    
+    //load poster image on collection view page
+    NSDictionary *movie = self.movies[indexPath.item];
+    
+    NSString *baseURLString = @"https://image.tmdb.org/t/p/w500";
+    NSString *posterURLString = movie[@"poster_path"];
+    NSString *fullPosterURLString = [baseURLString stringByAppendingString:posterURLString];
+    
+    NSURL *posterURL = [NSURL URLWithString:fullPosterURLString];       //checks to make sure it is a URL
+    cell.posterView.image = nil;
+    //the next image will be of the previous poster if it takes too long to load
+    [cell.posterView setImageWithURL:posterURL];
+    
+    return cell;
 }
 
 - (NSInteger)collectionView:(nonnull UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    <#code#>
+    return self.movies.count;
 }
 
 @end
