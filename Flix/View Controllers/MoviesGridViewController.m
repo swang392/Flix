@@ -28,7 +28,6 @@
     
     [self fetchMovies];
     
-    //collection view layout
     UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout *) self.collectionView.collectionViewLayout;
     
     layout.minimumInteritemSpacing = 5;
@@ -63,14 +62,9 @@
            else {
                NSDictionary *dataDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
                
-               //NSLog(@"%@", dataDictionary);                //check if everything was read in correctly
-               
                //Get the array of movies
                self.movies = dataDictionary[@"results"];
                [self.collectionView reloadData];
-//               for (NSDictionary *movie in self.movies) {
-//                   NSLog(@"%@", movie[@"title"]);
-//               }
            }
        
        }];
@@ -82,22 +76,17 @@
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
     UICollectionViewCell *tappedCell = sender;
     NSIndexPath *indexPath = [self.collectionView indexPathForCell:tappedCell];
     NSDictionary *movie = self.movies[indexPath.item];
     
     DetailsGridViewController *detailsViewController = [segue destinationViewController];
     detailsViewController.movie = movie;
-    
-    NSLog(@"Tapping on a movie!");
-    // Pass the selected object to the new view controller.
 }
 
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
     MovieCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"MovieCollectionCell" forIndexPath:indexPath];
     
-    //load poster image on collection view page
     NSDictionary *movie = self.movies[indexPath.item];
     
     NSString *baseURLString = @"https://image.tmdb.org/t/p/w500";

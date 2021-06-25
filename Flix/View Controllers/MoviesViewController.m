@@ -64,19 +64,10 @@
            else {
                NSDictionary *dataDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
                
-               NSLog(@"%@", dataDictionary);                //check if everything was read in correctly
-               
                //Get the array of movies
                self.movies = dataDictionary[@"results"];
-               for (NSDictionary *movie in self.movies) {
-                   NSLog(@"%@", movie[@"title"]);
-               }
                self.filteredMovies = self.movies;
                [self.tableView reloadData];
-
-               // TODO: Get the array of movies
-               // TODO: Store the movies in a property to use elsewhere
-               // TODO: Reload your table view data
            }
         [self.refreshControl endRefreshing];
        }];
@@ -114,6 +105,7 @@
     if(searchText.length != 0){
             NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(title CONTAINS[cd] %@)", searchText];
             self.filteredMovies = [self.movies filteredArrayUsingPredicate:predicate];
+            //allows the strings not to be exactly equal (case insensitive, and you can search for any word in the movie)
         }
         else
         {
@@ -134,7 +126,7 @@
 
 #pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
+
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     UITableViewCell *tappedCell = sender;
     NSIndexPath *indexPath = [self.tableView indexPathForCell:tappedCell];
@@ -142,9 +134,6 @@
     
     DetailsViewController *detailsViewController = [segue destinationViewController];
     detailsViewController.movie = movie;
-    NSLog(@"Tapping on a movie!");
-    // Get the new view controller using [segue destinationViewController]. Here, destination is the movie that we tapped on.
-    // Pass the selected object to the new view controller.
 }
 
 @end
