@@ -15,10 +15,8 @@
 
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
-
-//global variables
 @property (nonatomic, strong) NSArray *movies;
-@property (nonatomic, strong) NSArray *filteredMovies; //search bar
+@property (nonatomic, strong) NSArray *filteredMovies;
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 
@@ -32,13 +30,13 @@
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     self.searchBar.delegate = self;
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
     
     [self fetchMovies];
     
     self.refreshControl = [[UIRefreshControl alloc] init];
     [self.refreshControl addTarget:self action:@selector(fetchMovies) forControlEvents:UIControlEventValueChanged];
     [self.tableView insertSubview:self.refreshControl atIndex:0];
-         //add to table view
 }
 
 - (void)fetchMovies {
@@ -47,37 +45,29 @@
     NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:10.0];
     NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:nil delegateQueue:[NSOperationQueue mainQueue]];
     NSURLSessionDataTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-//        once the network call is finished (done in the background)
-           if (error != nil) {
-               //error, network call failed
-               UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Cannot Get Movies" message:@"The internet connection appears to be offline." preferredStyle:(UIAlertControllerStyleAlert)];
-               // create an OK action
-               UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Try Again" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                                                                        // handle response here.
-                                                                }];
-               // add the OK action to the alert controller
-               [alert addAction:okAction];
-               [self presentViewController:alert animated:YES completion:^{
-                   // optional code for what happens after the alert controller has finished presenting
-               }];
-           }
-           else {
-               NSDictionary *dataDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-               
-               //Get the array of movies
-               self.movies = dataDictionary[@"results"];
-               self.filteredMovies = self.movies;
-               [self.tableView reloadData];
-           }
+        if (error != nil) {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Cannot Get Movies" message:@"The internet connection appears to be offline." preferredStyle:(UIAlertControllerStyleAlert)];
+            UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Try Again" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                // handle response here.
+            }];
+            [alert addAction:okAction];
+            [self presentViewController:alert animated:YES completion:^{}];
+        }
+        else {
+            NSDictionary *dataDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+            
+            self.movies = dataDictionary[@"results"];
+            self.filteredMovies = self.movies;
+            [self.tableView reloadData];
+        }
         [self.refreshControl endRefreshing];
-       }];
+    }];
     [self.activityIndicator stopAnimating];
     [task resume];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    //Dispose of any resources that can be recreated.
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -103,15 +93,14 @@
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
     if(searchText.length != 0){
-            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(title CONTAINS[cd] %@)", searchText];
-            self.filteredMovies = [self.movies filteredArrayUsingPredicate:predicate];
-            //allows the strings not to be exactly equal (case insensitive, and you can search for any word in the movie)
-        }
-        else
-        {
-            self.filteredMovies = self.movies;
-        }
-        [self.tableView reloadData];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(title CONTAINS[cd] %@)", searchText];
+        self.filteredMovies = [self.movies filteredArrayUsingPredicate:predicate];
+    }
+    else
+    {
+        self.filteredMovies = self.movies;
+    }
+    [self.tableView reloadData];
 }
 
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar{
@@ -123,9 +112,6 @@
     self.searchBar.text = @"";
     [self.searchBar resignFirstResponder];
 }
-
-#pragma mark - Navigation
-
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     UITableViewCell *tappedCell = sender;
